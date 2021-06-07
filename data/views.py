@@ -1,19 +1,52 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.conf import settings
-from django.contrib.auth.hashers import make_password
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from .models import Student
+from .forms import StudentForm
 
 import csv
 
 def index(request):
-	return HttpResponse('<a href="/student/">Student</a>')
+	return HttpResponse('<a href="/students/">Students List</a>')
 
-def student(request):
-	with open(f"{settings.BASE_DIR}\\students.csv", "r") as csv_file:
-		csv_reader = csv.reader(csv_file)
-		next(csv_reader)
-		for line in csv_reader:
-			student = Student.objects.create(school_id=line[0], rollno=line[1], regno=line[2], fname=line[3], dob=line[4], math=line[5])
-	return HttpResponse('Student Accounts Updated')
+@login_required
+def students(request):
+	students = Student.objects.filter(school=request.user).order_by('rollno')
+	try:
+		first_student = students.filter(complete=False)[0]
+	except:
+		first_student = None
+	context = {
+		'students': students,
+		'first_student': first_student
+	}
+	return render(request, 'student_list.html', context)
+
+@login_required
+def student(request, rollno):
+	students = Student.objects.filter(school=request.user).order_by('rollno')
+	student = Student.objects.get(rollno=rollno, school=request.user)
+	form = StudentForm(instance=student)
+
+	if request.method == 'POST':
+		form = StudentForm(request.POST, instance=student)
+		if form.is_valid():
+			obj = form.save(commit=False)
+			obj.complete = True
+			obj.save()
+
+			try:
+				next_student = students.filter(rollno__gt=rollno, complete=False)[0]
+				messages.success(request, f'Congratulations! Data for student {obj.rollno} have been updated.')
+				return redirect(next_student.get_absolute_url())
+			except IndexError:
+				messages.success(request, 'Congratulations! Data for all the students have been updated.')
+				return redirect('students')
+
+	context = {
+		'student': student,
+		'students': students,
+		'form': form
+	}
+	return render(request, 'student.html', context)
