@@ -8,7 +8,12 @@ class Student(models.Model):
 	regno = models.CharField(max_length=11)
 	fname = models.CharField(max_length=40)
 	dob = models.DateField()
-	math = models.CharField(max_length=2, null=True)
+	sub1 = models.IntegerField()
+	sub2 = models.IntegerField()
+	sub3 = models.IntegerField()
+	math = models.CharField(max_length=2, null=True, blank=True)
+	english = models.CharField(max_length=2, null=True, blank=True)
+	hindi = models.CharField(max_length=2, null=True, blank=True)
 	complete = models.BooleanField(default=False)
 
 	def __str__(self):
