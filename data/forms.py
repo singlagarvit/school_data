@@ -21,6 +21,6 @@ class StudentForm(forms.ModelForm):
 			self.fields[field].widget.attrs.update({'class': 'form-control mb-3'})
 			if self[field].value() is not None:
 				self.fields[field].widget.attrs.update({'disabled': ''})
-			self.fields['math'].label = SUBJECT_CODE_DICT[self['sub1'].value()].title() #'math' => 'fl'
-			self.fields['english'].label = SUBJECT_CODE_DICT[self['sub2'].value()].title() #'english' => second field
-			self.fields['hindi'].label = SUBJECT_CODE_DICT[self['sub3'].value()].title() #'hindi' => third field
+			self.fields['math'].label = SUBJECT_CODE_DICT[int(self['sub1'].value())].title() #'math' => 'fl'
+			self.fields['english'].label = SUBJECT_CODE_DICT[int(self['sub2'].value())].title() #'english' => second field
+			self.fields['hindi'].label = SUBJECT_CODE_DICT[int(self['sub3'].value())].title() #'hindi' => third field

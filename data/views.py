@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+
+from django.core.paginator import Paginator #New Import
+
 from .models import Student
 from .forms import StudentForm
 
@@ -13,14 +16,29 @@ def index(request):
 
 @login_required
 def students(request):
-	students = Student.objects.filter(school=request.user).order_by('rollno')
+	all_students = Student.objects.filter(school=request.user).order_by('rollno')
+	paginator = Paginator(all_students, 1)
+	page_number = request.GET.get('page')
 	try:
-		first_student = students.filter(complete=False)[0]
+		students = paginator.get_page(page_number)
+	except (EmptyPage, InvalidPage):
+		students = paginator.get_page(1)
+
+	index = students.number - 1
+	max_index = len(paginator.page_range)
+	start_index = index - 3 if index >= 3 else 0
+	end_index = index + 3 if index <= max_index else max_index
+	page_range = paginator.page_range[start_index:end_index]
+
+	try:
+		first_student = all_students.filter(complete=False)[0]
 	except:
 		first_student = None
+
 	context = {
 		'students': students,
-		'first_student': first_student
+		'first_student': first_student,
+		'page_range': page_range
 	}
 	return render(request, 'student_list.html', context)
 
