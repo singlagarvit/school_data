@@ -22,6 +22,7 @@
 						{% for field in form %}
 						{% if field.name != 'school' %}
 						<div class="col-md-6">
+							<p>{{ field.errors }}</p>
 							<label for="{{ field.auto_id }}">{{ field.label }}</label>
 							{{ field }}
 						</div>
