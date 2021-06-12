@@ -59,6 +59,7 @@ def students(request):
 @login_required
 @has_update_permission
 def student(request, rollno):
+	last_elements_list = ['6', '5', '4', '3', '2', '1']
 	students = Student.objects.filter(school=request.user).order_by('rollno')
 	student = Student.objects.get(rollno=rollno, school=request.user)
 	form = StudentForm(instance=student)
@@ -82,7 +83,8 @@ def student(request, rollno):
 	context = {
 		'student': student,
 		'students': students,
-		'form': form
+		'form': form,
+		'last_elements_list': 'last_elements_list'
 	}
 	return render(request, 'student.html', context)
 
@@ -90,7 +92,7 @@ def student(request, rollno):
 def school_profile(request):
 	try:
 		profile = request.user.schoolprofile
-		return redirect('change_password')
+		return redirect('index')
 	except:
 		pass
 	user = request.user

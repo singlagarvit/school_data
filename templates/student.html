@@ -6,8 +6,14 @@
 		<div class="row">
 			<div class="col-lg-4">
 				<h5>List of Students</h5>
-				<ul class="student_list list-group">
+				<ul class="student_list list-group" style="height: calc(100vh - 250px);overflow-y: scroll;">
 					{% for s in students %}
+					<li class="list-group-item p-0{% if s.complete %} disabled{% endif %}">
+						<a class="list-group-item list-group-item-action border-0{% if s == student %} active{% endif %}" href="{{ s.get_absolute_url }}">{{ s.rollno }}</a>
+					</li>
+					<li class="list-group-item p-0{% if s.complete %} disabled{% endif %}">
+						<a class="list-group-item list-group-item-action border-0{% if s == student %} active{% endif %}" href="{{ s.get_absolute_url }}">{{ s.rollno }}</a>
+					</li>
 					<li class="list-group-item p-0{% if s.complete %} disabled{% endif %}">
 						<a class="list-group-item list-group-item-action border-0{% if s == student %} active{% endif %}" href="{{ s.get_absolute_url }}">{{ s.rollno }}</a>
 					</li>
@@ -21,7 +27,7 @@
 					<div class="row">
 						{% for field in form %}
 						{% if field.name != 'school' %}
-						<div class="col-md-6">
+						<div class="{% if forloop.counter0 > 7 %}col-md-2{% else %}col-md-6{% endif %}">
 							<p>{{ field.errors }}</p>
 							<label for="{{ field.auto_id }}">{{ field.label }}</label>
 							{{ field }}
