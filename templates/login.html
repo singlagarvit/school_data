@@ -6,7 +6,7 @@
 	<title>Login</title>
 </head>
 <body>
-	<form method="post" action=".">
+	<form method="post" action="{% if next %}.?next={{ next }}{% else %}.{% endif %}">
 		{% csrf_token %}
 		{{ form.as_p }}
 		<button type="submit">Login</button>

@@ -17,13 +17,14 @@ class StudentForm(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		super(StudentForm, self).__init__(*args, **kwargs)
+		if self['sub3'].value() is not None:
+			self.fields['hindi'].label = SUBJECT_CODE_DICT[int(self['sub3'].value())].title() #'hindi' => third field
 		for field in self.fields:
 			self.fields[field].widget.attrs.update({'class': 'form-control mb-3'})
 			if self[field].value() is not None:
 				self.fields[field].widget.attrs.update({'disabled': ''})
 			self.fields['math'].label = SUBJECT_CODE_DICT[int(self['sub1'].value())].title() #'math' => 'fl'
 			self.fields['english'].label = SUBJECT_CODE_DICT[int(self['sub2'].value())].title() #'english' => second field
-			# self.fields['hindi'].label = SUBJECT_CODE_DICT[int(self['sub3'].value())].title() #'hindi' => third field
 			if len(self[field].errors) > 0:
 				self.fields[field].widget.attrs.pop('disabled')
 

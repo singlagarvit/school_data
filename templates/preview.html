@@ -5,23 +5,32 @@
 <section class="student my-5">
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-4">
-				<h5>List of Students</h5>
-				<ul class="student_list list-group" style="height: calc(100vh - 250px);overflow-y: scroll;">
-					{% for s in students %}
-					<li class="list-group-item p-0{% if s.complete %} disabled{% endif %}">
-						<a class="list-group-item list-group-item-action border-0{% if s == student %} active{% endif %}" href="{{ s.get_absolute_url }}">{{ s.rollno }}</a>
+			<div class="col-lg-5">
+				<h3 class="mb-4">Preview your Submission</h3>
+				<ul class="student_list list-group">
+					{% for field in form %}
+					{% if field.name != 'school' and field.name != 'sub1' and field.name != 'sub2' and field.name != 'sub3' %}
+					<li class="list-group-item p-0">
+						<b>{{ field.label }}</b>: {{ field.data }}
 					</li>
+					{% endif %}
 					{% endfor %}
-				</ul>	
+					<li class="list-group-item p-0">
+						{% blocktrans %}<b>Security hash</b>: {{ hash_value }}{% endblocktrans %}
+					</li>
+				</ul>
+				<h3 class="my-4">Or Edit it again.</h3>
+				<a href="{% url 'student' rollno=student.rollno %}" class="d-block btn btn-success">Edit</a>
 			</div>
-			<div class="col-lg-8">
-				<form method="POST" action=".">
+			<div class="col-lg-7">
+				<form method="POST" action="">
 					{% csrf_token %}
 					<input type="hidden" name="school" value="{{ student.school.id }}" />
-					<input type="hidden" name="{{ stage_field }}" value="1" />
+					<input type="hidden" name="{{ hash_field }}" value="{{ hash_value }}" />
+					<input type="hidden" name="{{ stage_field }}" value="2" />
 					<div class="row">
 						{% for field in form %}
+						{{ field.as_hidden }}
 						{% if field.name != 'school' %}
 						<div class="{% if forloop.counter0 > 7 %}col-md-2{% else %}col-md-6{% endif %}">
 							<p>{{ field.errors }}</p>
@@ -30,7 +39,7 @@
 						</div>
 						{% endif %}
 						{% endfor %}
-						<button class="btn btn-primary mt-3 mx-2{% if student.complete %} disabled{% endif %}" type="submit">{% trans "Preview" %}</button>
+						<button class="btn btn-primary mt-3 mx-2{% if student.complete %} disabled{% endif %}" type="submit">{% trans "Submit" %}</button>
 					</div>
 				</form>
 			</div>

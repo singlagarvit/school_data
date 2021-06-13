@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'data.apps.DataConfig',
     'mailer',
+    'formtools',
 ]
 
 MIDDLEWARE = [
