@@ -9,7 +9,7 @@
 				<h3 class="mb-4">Preview your Submission</h3>
 				<ul class="student_list list-group">
 					{% for field in form %}
-					{% if field.name != 'school' and field.name != 'sub1' and field.name != 'sub2' and field.name != 'sub3' %}
+					{% if field.name != 'school' and field.name != 'sub1' and field.name != 'sub2' and field.name != 'sub3' and field.value %}
 					<li class="list-group-item p-0">
 						<b>{{ field.label }}</b>: {{ field.data }}
 					</li>
@@ -31,7 +31,7 @@
 					<div class="row">
 						{% for field in form %}
 						{{ field.as_hidden }}
-						{% if field.name != 'school' %}
+						{% if field.name != 'school' and field.name != 'sub1' and field.name != 'sub2' and field.name != 'sub3' %}
 						<div class="{% if forloop.counter0 > 7 %}col-md-2{% else %}col-md-6{% endif %}">
 							<p>{{ field.errors }}</p>
 							<label for="{{ field.auto_id }}">{{ field.label }}</label>

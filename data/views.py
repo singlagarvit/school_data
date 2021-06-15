@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import Permission
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -15,7 +15,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 # from mailer import send_mail
 
-from .models import Student
+from .models import Student, User
 from .forms import StudentForm, SchoolProfileForm
 from .decorators import has_update_permission, has_password_change_permission
 from .tokens import account_activation_token

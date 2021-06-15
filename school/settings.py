@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'data.apps.DataConfig',
+    'analyst.apps.AnalystConfig',
     'mailer',
     'formtools',
 ]
@@ -70,6 +71,8 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL = 'data.User'
 
 LOGIN_URL = '/login/'
 

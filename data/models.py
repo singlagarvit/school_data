@@ -1,8 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .validators import validate_marks
+
+class User(AbstractUser):
+	is_analyst = models.BooleanField(default=False)
 
 class Student(models.Model):
 	school = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -17,6 +20,7 @@ class Student(models.Model):
 	english = models.CharField(max_length=2, null=True, blank=True, validators=[validate_marks])
 	hindi = models.CharField(max_length=2, null=True, blank=True, validators=[validate_marks])
 	complete = models.BooleanField(default=False)
+	completed_on = models.DateTimeField(auto_now=True)
 
 	def __str__(self):
 		return f'{self.school.username} - {self.rollno}'

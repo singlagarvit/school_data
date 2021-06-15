@@ -16,13 +16,21 @@
 				</ul>	
 			</div>
 			<div class="col-lg-8">
+				<ul>
+				{% for error in form.non_field_errors %}
+					<li>{{ error }}</li>
+				{% endfor %}
+				</ul>
 				<form method="POST" action=".">
 					{% csrf_token %}
 					<input type="hidden" name="school" value="{{ student.school.id }}" />
+					<input type="hidden" name="sub1" value="{{ student.sub1 }}" />
+					<input type="hidden" name="sub2" value="{{ student.sub2 }}" />
+					<input type="hidden" name="sub3" value="{% if student.sub3 %}{{ student.sub3 }}{% endif %}" />
 					<input type="hidden" name="{{ stage_field }}" value="1" />
 					<div class="row">
 						{% for field in form %}
-						{% if field.name != 'school' %}
+						{% if field.name != 'school' and field.name != 'sub1' and field.name != 'sub2' and field.name != 'sub3' %}
 						<div class="{% if forloop.counter0 > 7 %}col-md-2{% else %}col-md-6{% endif %}">
 							<p>{{ field.errors }}</p>
 							<label for="{{ field.auto_id }}">{{ field.label }}</label>
